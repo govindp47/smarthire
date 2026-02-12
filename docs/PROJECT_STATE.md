@@ -11,7 +11,7 @@
 | Phase | Status | Sessions | Completion |
 |-------|--------|----------|------------|
 | Phase 0: Foundation | ✅ Complete | 2/2 | 100% |
-| Phase 1: Core Backend | 🔄 In Progress | 1/4 | 25% |
+| Phase 1: Core Backend | 🔄 In Progress | 2/4 | 50% |
 | Phase 2: AI Core | ⏳ Not Started | 0/4 | 0% |
 | Phase 3: Frontend | ⏳ Not Started | 0/4 | 0% |
 | Phase 4: Deployment | ⏳ Not Started | 0/3 | 0% |
@@ -47,18 +47,24 @@
 - [x] Protected route (/me)
 - [x] FastAPI main application
 - [x] CORS configuration
+- [x] Job Pydantic schemas
+- [x] Job CRUD endpoints (create, list, get, update, delete)
+- [x] Owner-based job permissions
+- [x] Job statistics endpoint
+- [x] API documentation created
 
 ---
 
 ## 🔄 Current Task
 
-**Working On:** Phase 1.2 - Job Management APIs
+**Working On:** Phase 1.3 - Resume Upload & File Management
 
 **Next Steps:**
 
-1. Create Job Pydantic schemas
-2. Build Job CRUD endpoints
-3. Test job creation and listing
+1. Create Resume Pydantic schemas
+2. Build file upload endpoint
+3. Setup local file storage (S3 later)
+4. Resume listing/detail endpoints
 
 ---
 

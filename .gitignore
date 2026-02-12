@@ -65,6 +65,7 @@ embeddings/
 uploads/
 resumes/
 temp/
+backend/uploads/
 
 # Docker
 *.env.docker

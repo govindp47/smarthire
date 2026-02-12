@@ -11,7 +11,7 @@
 | Phase | Status | Sessions | Completion |
 |-------|--------|----------|------------|
 | Phase 0: Foundation | ✅ Complete | 2/2 | 100% |
-| Phase 1: Core Backend | ⏳ Not Started | 0/4 | 0% |
+| Phase 1: Core Backend | 🔄 In Progress | 1/4 | 25% |
 | Phase 2: AI Core | ⏳ Not Started | 0/4 | 0% |
 | Phase 3: Frontend | ⏳ Not Started | 0/4 | 0% |
 | Phase 4: Deployment | ⏳ Not Started | 0/3 | 0% |
@@ -21,6 +21,7 @@
 ## ✅ Completed Tasks
 
 ### Phase 0: Foundation
+
 - [x] Project folder structure created
 - [x] Git initialized
 - [x] .gitignore created
@@ -34,27 +35,43 @@
 - [x] Alembic migrations configured
 - [x] Initial migration applied
 
+### Phase 1: Core Backend
+
+- [x] User Pydantic schemas
+- [x] Auth Pydantic schemas
+- [x] Password hashing utilities
+- [x] JWT token generation
+- [x] Auth middleware/dependencies
+- [x] Signup endpoint
+- [x] Login endpoint
+- [x] Protected route (/me)
+- [x] FastAPI main application
+- [x] CORS configuration
+
 ---
 
 ## 🔄 Current Task
 
-**Working On:** Phase 0 complete - Ready for Phase 1
+**Working On:** Phase 1.2 - Job Management APIs
 
 **Next Steps:**
-1. Start Phase 1: Authentication system
-2. Create Pydantic schemas
-3. Build auth endpoints
+
+1. Create Job Pydantic schemas
+2. Build Job CRUD endpoints
+3. Test job creation and listing
 
 ---
 
 ## 📝 Files Created
 
 ### Configuration Files
+
 - `.gitignore` - Git ignore rules
 - `backend/requirements.txt` - Python dependencies
 - `backend/.env.example` - Environment variable template
 
 ### Documentation
+
 - `docs/PROJECT_STATE.md` - This file
 - `docs/ARCHITECTURE.md` - System design (to be created)
 - `docs/API_SPEC.md` - API documentation (to be created)
@@ -82,6 +99,7 @@ None currently.
 ## 📌 Quick Context (for future sessions)
 
 **Tech Stack:**
+
 - Backend: FastAPI + PostgreSQL + SQLAlchemy
 - AI: LangChain + OpenAI + FAISS
 - Frontend: React + Vite
@@ -89,12 +107,14 @@ None currently.
 
 **Project Goal:**
 Build an AI-powered resume screening SaaS where recruiters can:
+
 1. Create job postings
 2. Upload candidate resumes
 3. Get AI-powered scoring/ranking
 4. Query resumes using natural language (RAG)
 
 **Environment:**
+
 - Python: 3.11.14
 - PostgreSQL: 15.15
 - OS: macOS

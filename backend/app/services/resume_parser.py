@@ -19,7 +19,7 @@ class ResumeParserService:
     def __init__(self):
         """Initialize OpenAI client."""
         self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-        self.model = "gpt-4o-mini"  # Fast and cost-effective
+        self.model = settings.OPENAI_MODEL
     
     async def parse_resume(self, resume_text: str) -> Dict[str, Any]:
         """

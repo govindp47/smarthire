@@ -12,7 +12,7 @@
 |-------|--------|----------|------------|
 | Phase 0: Foundation | ✅ Complete | 2/2 | 100% |
 | Phase 1: Core Backend | ✅ Complete | 3/4 | 100% |
-| Phase 2: AI Core | 🔄 In Progress | 1/4 | 25% |
+| Phase 2: AI Core | 🔄 In Progress | 2/4 | 50% |
 | Phase 3: Frontend | ⏳ Not Started | 0/4 | 0% |
 | Phase 4: Deployment | ⏳ Not Started | 0/3 | 0% |
 
@@ -62,25 +62,32 @@
 
 ### Phase 2: AI Core
 
-- [x] Text extraction service (PDF/DOCX)
+- [x] Text extraction service (PDF/DOCX) - storage agnostic
 - [x] LLM-based resume parser
 - [x] Structured data extraction (skills, experience, education)
 - [x] Background task processing
 - [x] Resume parsing endpoints
 - [x] Auto-population of candidate info
+- [x] Scoring service with keyword matching
+- [x] Experience level scoring
+- [x] Semantic similarity with embeddings
+- [x] Weighted scoring algorithm
+- [x] Automatic ranking system
+- [x] Batch scoring endpoints
+- [x] Leaderboard endpoint
 
 ---
 
 ## 🔄 Current Task
 
-**Working On:** Phase 2.2 - Resume Scoring & Ranking
+**Working On:** Phase 2.3 - RAG (Retrieval Augmented Generation)
 
 **Next Steps:**
 
-1. Create scoring algorithm
-2. Calculate semantic similarity
-3. Rank resumes by score
-4. Update scores in database
+1. Setup ChromaDB vector store
+2. Create embeddings service
+3. Build RAG query endpoint
+4. Enable natural language queries over resumes
 
 ---
 

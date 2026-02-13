@@ -28,7 +28,8 @@ class Settings(BaseSettings):
     
     # OpenAI
     OPENAI_API_KEY: str
-    
+    OPENAI_MODEL: str
+
     # AWS S3
     AWS_ACCESS_KEY_ID: str = ""
     AWS_SECRET_ACCESS_KEY: str = ""

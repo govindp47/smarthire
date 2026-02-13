@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.database import close_db
-from app.api.routes import auth, jobs, resumes
+from app.api.routes import auth, jobs, parsing, resumes
 
 
 @asynccontextmanager
@@ -46,6 +46,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(jobs.router, prefix="/api/jobs", tags=["Jobs"])
 app.include_router(resumes.router, prefix="/api/jobs", tags=["Resumes"])
+app.include_router(parsing.router, prefix="/api", tags=["Parsing"])
 
 
 @app.get("/")

@@ -78,7 +78,7 @@ class ResumeDataSchema(BaseModel):
     languages: List[str] = Field(default_factory=list)
     total_experience_years: Optional[float] = None
     summary: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    resume_metadata: Dict[str, Any] = Field(default_factory=dict)
     created_at: datetime
     updated_at: datetime
     

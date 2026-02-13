@@ -11,8 +11,8 @@
 | Phase | Status | Sessions | Completion |
 |-------|--------|----------|------------|
 | Phase 0: Foundation | ✅ Complete | 2/2 | 100% |
-| Phase 1: Core Backend | 🔄 In Progress | 3/4 | 75% |
-| Phase 2: AI Core | ⏳ Not Started | 0/4 | 0% |
+| Phase 1: Core Backend | ✅ Complete | 3/4 | 100% |
+| Phase 2: AI Core | 🔄 In Progress | 1/4 | 25% |
 | Phase 3: Frontend | ⏳ Not Started | 0/4 | 0% |
 | Phase 4: Deployment | ⏳ Not Started | 0/3 | 0% |
 
@@ -21,6 +21,7 @@
 ## ✅ Completed Tasks
 
 ### Phase 0: Foundation
+
 - [x] Project folder structure created
 - [x] Git initialized
 - [x] .gitignore created
@@ -35,6 +36,7 @@
 - [x] Initial migration applied
 
 ### Phase 1: Core Backend
+
 - [x] User Pydantic schemas
 - [x] Auth Pydantic schemas
 - [x] Password hashing utilities
@@ -58,28 +60,40 @@
 - [x] File download endpoint
 - [x] Resume deletion with file cleanup
 
+### Phase 2: AI Core
+
+- [x] Text extraction service (PDF/DOCX)
+- [x] LLM-based resume parser
+- [x] Structured data extraction (skills, experience, education)
+- [x] Background task processing
+- [x] Resume parsing endpoints
+- [x] Auto-population of candidate info
+
 ---
 
 ## 🔄 Current Task
 
-**Working On:** Phase 1.4 - Testing & Error Handling
+**Working On:** Phase 2.2 - Resume Scoring & Ranking
 
 **Next Steps:**
-1. Add comprehensive error handling
-2. Create basic tests (pytest)
-3. Add input validation edge cases
-4. Phase 1 complete - ready for AI features!
+
+1. Create scoring algorithm
+2. Calculate semantic similarity
+3. Rank resumes by score
+4. Update scores in database
 
 ---
 
 ## 📝 Files Created
 
 ### Configuration Files
+
 - `.gitignore` - Git ignore rules
 - `backend/requirements.txt` - Python dependencies
 - `backend/.env.example` - Environment variable template
 
 ### Documentation
+
 - `docs/PROJECT_STATE.md` - This file
 - `docs/ARCHITECTURE.md` - System design (to be created)
 - `docs/API_SPEC.md` - API documentation (to be created)
@@ -107,6 +121,7 @@ None currently.
 ## 📌 Quick Context (for future sessions)
 
 **Tech Stack:**
+
 - Backend: FastAPI + PostgreSQL + SQLAlchemy
 - AI: LangChain + OpenAI + FAISS
 - Frontend: React + Vite
@@ -114,12 +129,14 @@ None currently.
 
 **Project Goal:**
 Build an AI-powered resume screening SaaS where recruiters can:
+
 1. Create job postings
 2. Upload candidate resumes
 3. Get AI-powered scoring/ranking
 4. Query resumes using natural language (RAG)
 
 **Environment:**
+
 - Python: 3.11.14
 - PostgreSQL: 15.15
 - OS: macOS

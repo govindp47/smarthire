@@ -7,6 +7,8 @@ import { SignupPage } from './pages/Signup';
 import { DashboardPage } from './pages/Dashboard';
 import { CreateJobPage } from './pages/CreateJob';
 import { JobDetailPage } from './pages/JobDetail';
+import { UploadResumePage } from './pages/UploadResume';
+import { CandidatesPage } from './pages/Candidates';
 
 // Create a client for React Query
 const queryClient = new QueryClient({
@@ -50,6 +52,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <JobDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/:id/upload"
+              element={
+                <ProtectedRoute>
+                  <UploadResumePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/:id/resumes"
+              element={
+                <ProtectedRoute>
+                  <CandidatesPage />
                 </ProtectedRoute>
               }
             />

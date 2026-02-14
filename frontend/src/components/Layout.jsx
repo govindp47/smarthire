@@ -22,8 +22,8 @@ export const Layout = ({ children }) => {
 
   const navigation = [
     { name: 'Jobs', href: '/dashboard', icon: Briefcase },
-    { name: 'All Resumes', href: '/resumes', icon: FileText },
-    { name: 'AI Query', href: '/query', icon: MessageSquare },
+    // { name: 'All Resumes', href: '/resumes', icon: FileText },
+    // { name: 'AI Query', href: '/query', icon: MessageSquare },
   ];
 
   const handleLogout = () => {

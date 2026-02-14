@@ -9,6 +9,7 @@ import { CreateJobPage } from './pages/CreateJob';
 import { JobDetailPage } from './pages/JobDetail';
 import { UploadResumePage } from './pages/UploadResume';
 import { CandidatesPage } from './pages/Candidates';
+import { AIQueryPage } from './pages/AIQuery';
 
 // Create a client for React Query
 const queryClient = new QueryClient({
@@ -68,6 +69,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CandidatesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/:id/query"
+              element={
+                <ProtectedRoute>
+                  <AIQueryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/query"
+              element={
+                <ProtectedRoute>
+                  <AIQueryPage />
                 </ProtectedRoute>
               }
             />

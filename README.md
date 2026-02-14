@@ -1,92 +1,124 @@
-# 🎯 SmartHire - AI-Powered Resume Screening SaaS
+# SmartHire - AI-Powered Resume Screening Platform
 
-**An intelligent ATS alternative that uses AI to rank candidates, extract structured data, and answer natural language queries about resumes.**
+<div align="center">
+
+![SmartHire](https://img.shields.io/badge/SmartHire-AI--Powered-blue)
+![Python](https://img.shields.io/badge/Python-3.11+-green)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-teal)
+![React](https://img.shields.io/badge/React-18+-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+**Intelligent resume screening and candidate matching powered by AI**
+
+[Features](#features) • [Tech Stack](#tech-stack) • [Getting Started](#getting-started) • [Documentation](#documentation)
+
+</div>
 
 ---
 
-## 🚀 Features
+## 🎯 Overview
 
-- **Job Management** - Create and manage job postings
-- **Resume Upload** - Bulk resume processing (PDF/DOCX)
-- **AI Parsing** - Structured data extraction (skills, experience, education)
-- **Smart Scoring** - Semantic ranking based on job requirements
-- **Natural Language Queries** - Ask questions like "Who has 5+ years in Python and AWS?"
-- **RAG-Powered Search** - Context-aware resume retrieval
-- **Multi-tenant** - Separate workspaces for recruiters
+SmartHire is a modern SaaS platform that revolutionizes the recruitment process using artificial intelligence. It automatically parses resumes, scores candidates against job requirements, and enables natural language queries over your candidate database using Retrieval Augmented Generation (RAG).
+
+### Key Capabilities
+
+- 🤖 **AI Resume Parsing** - Automatically extract skills, experience, and education from PDFs and DOCX files
+- ⚡ **Smart Scoring** - Multi-factor algorithm scoring candidates based on skills (50%), experience (25%), and semantic similarity (25%)
+- 🔍 **Semantic Search** - Find candidates using natural language queries powered by LangChain RAG
+- 📊 **Intelligent Ranking** - Automatically rank candidates by match score
+- 💬 **AI Chat Interface** - Ask questions about your candidate pool in plain English
+- 🎨 **Modern UI** - Clean, responsive interface built with React and Tailwind CSS
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Features
+
+### For Recruiters
+
+- **Job Management**: Create and manage multiple job postings
+- **Resume Upload**: Drag-and-drop interface supporting PDF and DOCX files
+- **Automated Processing**: Batch parse and score hundreds of resumes in minutes
+- **Smart Filtering**: Search and filter candidates by status, score, and more
+- **AI-Powered Insights**: Ask questions like "Who has 5+ years of Python and AWS experience?"
+- **Detailed Profiles**: View extracted skills, experience, education, and summaries
+
+### Technical Features
+
+- **RESTful API**: FastAPI backend with full OpenAPI documentation
+- **Async Processing**: Background tasks for parsing and scoring
+- **Scalable Storage**: Support for local filesystem and AWS S3
+- **Vector Database**: ChromaDB for semantic search capabilities
+- **Real-time Updates**: React Query for optimistic updates and caching
+- **Secure Authentication**: JWT-based auth with password hashing
+
+---
+
+## 🛠 Tech Stack
 
 ### Backend
 
-- **FastAPI** - Modern Python web framework
-- **PostgreSQL** - Primary database
-- **SQLAlchemy** - ORM with async support
-- **Alembic** - Database migrations
-
-### AI/ML
-
-- **LangChain** - LLM orchestration framework
-- **OpenAI GPT-4** - Language model
-- **FAISS** - Vector similarity search
-- **Sentence Transformers** - Embeddings
+- **Framework**: FastAPI (Python 3.11+)
+- **Database**: PostgreSQL 15 with SQLAlchemy (async)
+- **AI/ML**:
+  - OpenAI GPT-4o-mini for resume parsing and chat
+  - LangChain 1.0+ with LCEL (modern patterns)
+  - ChromaDB for vector storage
+  - OpenAI embeddings (text-embedding-ada-002)
+- **File Storage**: Local filesystem / AWS S3
+- **Background Tasks**: FastAPI BackgroundTasks
+- **Migrations**: Alembic
 
 ### Frontend
 
-- **React** - UI framework
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling (to be added)
+- **Framework**: React 18 with Vite
+- **Styling**: Tailwind CSS
+- **Routing**: React Router v6
+- **State Management**: React Context + TanStack Query
+- **HTTP Client**: Axios
+- **Icons**: Lucide React
 
-### Infrastructure
+### DevOps (Ready)
 
-- **Docker** - Containerization
-- **AWS S3** - Resume storage
-- **AWS RDS** - Managed PostgreSQL
-- **AWS EC2** - Application hosting
-
----
-
-## 📁 Project Structure
-
-```
-smarthire/
-├── backend/          # FastAPI application
-│   ├── app/
-│   │   ├── api/      # API routes
-│   │   ├── models/   # Database models
-│   │   ├── schemas/  # Pydantic schemas
-│   │   ├── services/ # Business logic
-│   │   └── core/     # Config, security
-│   └── tests/        # Unit tests
-├── frontend/         # React application
-│   └── src/
-├── docs/             # Project documentation
-└── docker-compose.yml
-```
+- **Containerization**: Docker + Docker Compose
+- **Deployment**: AWS (EC2, RDS, S3)
+- **Environment**: Python venv, npm
 
 ---
 
-## 🏃 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Python 3.11+
-- PostgreSQL 15+
 - Node.js 18+
-- Docker (optional)
+- PostgreSQL 15+
+- OpenAI API key
 
-### Backend Setup
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/govindp47/smarthire.git
+cd smarthire
+```
+
+### 2. Backend Setup
 
 ```bash
 cd backend
-python3.11 -m venv venv
+
+# Create virtual environment
+python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 
-# Setup environment
+# Create .env file
 cp .env.example .env
-# Edit .env with your credentials
+# Edit .env and add your credentials:
+# - DATABASE_URL
+# - SECRET_KEY
+# - OPENAI_API_KEY
 
 # Run migrations
 alembic upgrade head
@@ -95,111 +127,140 @@ alembic upgrade head
 uvicorn app.main:app --reload
 ```
 
-API will be available at: <http://localhost:8000>  
-Docs: <http://localhost:8000/docs>
+Backend will be available at `http://localhost:8000`
 
-### Frontend Setup
+### 3. Frontend Setup
 
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Create .env file
+cp .env.example .env
+# Edit if needed (defaults to http://localhost:8000)
+
+# Start development server
 npm run dev
 ```
 
-Frontend will be available at: <http://localhost:5173>
+Frontend will be available at `http://localhost:3000`
+
+### 4. Access the Application
+
+1. Open `http://localhost:3000`
+2. Sign up for a new account
+3. Create your first job posting
+4. Upload resumes and let AI do the magic! ✨
 
 ---
 
 ## 📚 Documentation
 
-- [Project State](docs/PROJECT_STATE.md) - Current progress
-- [Architecture](docs/ARCHITECTURE.md) - System design
-- [API Specification](docs/API_SPEC.md) - Endpoint details
-- [Database Schema](docs/DATABASE_SCHEMA.md) - Data models
-- [Decisions Log](docs/DECISIONS.md) - Technical choices
+- **API Documentation**: `http://localhost:8000/docs` (Swagger UI)
+- **Database Schema**: See [docs/DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md)
+- **Architecture**: See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- **Project State**: See [docs/PROJECT_STATE.md](docs/PROJECT_STATE.md)
 
 ---
 
-## 🗄️ Database Schema
+## 🏗️ Project Structure
 
-See [DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md) for complete schema.
-
-**Core Tables:**
-
-- `users` - Recruiter accounts
-- `jobs` - Job postings
-- `resumes` - Candidate resumes
-- `resume_data` - Parsed structured data
-- `embeddings` - Vector representations
-
----
-
-## 🔐 Environment Variables
-
-See `.env.example` for all required variables.
-
-**Critical:**
-
-- `DATABASE_URL` - PostgreSQL connection
-- `SECRET_KEY` - JWT signing key
-- `OPENAI_API_KEY` - OpenAI API access
-- `AWS_*` - S3 credentials
-
----
-
-## 🧪 Testing
-
-```bash
-cd backend
-pytest
-pytest --cov=app tests/  # With coverage
+```
+smarthire/
+├── backend/
+│   ├── app/
+│   │   ├── api/routes/      # API endpoints
+│   │   ├── core/            # Config, security, LLM instances
+│   │   ├── models/          # SQLAlchemy models
+│   │   ├── schemas/         # Pydantic schemas
+│   │   ├── services/        # Business logic (parsing, scoring, RAG)
+│   │   ├── database.py      # DB connection
+│   │   └── main.py          # FastAPI app
+│   ├── alembic/             # Database migrations
+│   ├── uploads/             # Local file storage (gitignored)
+│   ├── vector_store/        # ChromaDB data (gitignored)
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # Reusable components
+│   │   ├── context/         # React contexts
+│   │   ├── lib/             # API client, utilities
+│   │   ├── pages/           # Page components
+│   │   └── App.jsx
+│   └── package.json
+└── docs/                    # Documentation
 ```
 
 ---
 
-## 🐳 Docker Deployment
+## 🔧 Configuration
 
-```bash
-docker-compose up --build
+### Environment Variables
+
+#### Backend (.env)
+
+```env
+DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/smarthire_db
+SECRET_KEY=your-secret-key-here
+OPENAI_API_KEY=sk-...
+EMBEDDING_MODEL=text-embedding-ada-002
+VECTOR_STORE_PATH=./vector_store
+CORS_ORIGINS=http://localhost:3000
+```
+
+#### Frontend (.env)
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 ---
 
-## 📈 Roadmap
+## 🤖 AI Features Explained
 
-- [x] Phase 0: Foundation
-- [ ] Phase 1: Core Backend (Auth, Jobs, Resumes)
-- [ ] Phase 2: AI Features (Parsing, RAG, Scoring)
-- [ ] Phase 3: Frontend UI
-- [ ] Phase 4: AWS Deployment
+### Resume Parsing Pipeline
 
----
+1. **Text Extraction**: PDFs/DOCX → plain text (using pypdf/python-docx)
+2. **LLM Parsing**: GPT-4o-mini extracts structured data (skills, experience, education)
+3. **Storage**: Parsed data saved to PostgreSQL (JSONB columns)
+4. **Embedding**: Text chunks → OpenAI embeddings → ChromaDB
 
-## 🤝 Contributing
+### Scoring Algorithm
 
-This is a learning/portfolio project. Feedback and suggestions welcome!
+- **Skills Match (50%)**: Keyword matching + partial matching
+- **Experience Level (25%)**: Years of experience vs job requirements
+- **Semantic Similarity (25%)**: Cosine similarity of embeddings
 
----
+### RAG Query System (LangChain 1.0+)
 
-## 📄 License
-
-MIT License - See LICENSE file
-
----
-
-## 👤 Author
-
-Built as a demonstration project for AI Engineer role applications.
+- Uses modern **LCEL (LangChain Expression Language)**
+- No legacy chains (following latest LangChain recommendations)
+- Singleton LLM instances for performance
+- Conversation memory for follow-up questions
 
 ---
 
 ## 🙏 Acknowledgments
 
-- FastAPI community
-- LangChain documentation
-- OpenAI API
+This project was built with the assistance of **Claude AI (Anthropic)** as a learning and development tool. Claude provided:
+
+- Architecture guidance and best practices
+- Code generation and iteration
+- LangChain 1.0+ integration patterns
+- Modern async Python and React patterns
+
+**Transparency Statement**: AI assistance was used to accelerate development and learn new technologies. All code has been reviewed, understood, and can be explained by the developer. Claude served as a pair programming assistant to help implement industry-standard patterns and best practices.
+
 
 ---
 
-**Status:** 🚧 In Development  
-**Last Updated:** February 2026
+
+<div align="center">
+
+**Built with ❤️ using FastAPI, React, and AI**
+
+⭐ Star this repo if you find it helpful!
+
+</div>

@@ -1,6 +1,6 @@
 # SmartHire - Architecture Documentation
 
-**Last Updated:** 2026-02-13  
+**Last Updated:** 2026-02-15  
 **Version:** 1.0.0
 
 ---
@@ -9,12 +9,14 @@
 
 ```
 ┌─────────────────┐
-│   React Frontend │
+│  React Frontend  │
+│  (Vite + React)  │
 └────────┬────────┘
          │ HTTP/REST
          ▼
 ┌─────────────────┐
 │  FastAPI Backend │
+│  (Python 3.11+)  │
 └────────┬────────┘
          │
          ├──────────┐
@@ -22,7 +24,7 @@
          ▼          ▼
 ┌──────────┐  ┌──────────┐
 │PostgreSQL│  │ ChromaDB │
-│          │  │ (Vector) │
+│  (Main)  │  │ (Vector) │
 └──────────┘  └──────────┘
          │          │
          └────┬─────┘
@@ -35,21 +37,33 @@
 
 ---
 
-## LangChain Integration
+## LangChain 1.0+ Integration
 
-### **Components Used**
+### **Modern LCEL Architecture**
+
+SmartHire uses **LangChain 1.0+ with LCEL (LangChain Expression Language)** - the modern, recommended approach.
+
+**Key Components:**
 
 1. **LangChain Core**
-   - `RetrievalQA` - Single-shot Q&A
-   - `ConversationalRetrievalChain` - Multi-turn conversations
-   - `PromptTemplate` - Custom prompts
+   - `ChatPromptTemplate` - Modern chat prompts
+   - `RunnablePassthrough` - Data flow
+   - `StrOutputParser` - Parse LLM output
+   - LCEL chains (composable pipelines)
 
 2. **LangChain OpenAI**
-   - `ChatOpenAI` - LLM interface
-   - `OpenAIEmbeddings` - Text embeddings
+   - `ChatOpenAI` - LLM interface (GPT-4o-mini)
+   - `OpenAIEmbeddings` - text-embedding-ada-002
 
-3. **LangChain Community**
-   - `Chroma` - Vector store integration
+3. **LangChain Chroma**
+   - `Chroma` - Vector store with native LangChain integration
+
+**Why LCEL?**
+
+- ✅ Modern recommended pattern (no legacy chains)
+- ✅ More composable and debuggable
+- ✅ Better streaming support
+- ✅ Clearer data flow
 
 ---
 
@@ -58,46 +72,95 @@
 ### **Phase 1: Document Ingestion**
 
 ```
-Resume Upload → Parse PDF/DOCX → Extract Text
+Resume Upload (PDF/DOCX)
       ↓
-LLM Structured Extraction → Save to PostgreSQL
+Text Extraction (pypdf/python-docx)
+      ↓
+LLM Parsing (GPT-4o-mini, JSON mode)
+  → Extract: skills, experience, education
+  → Save structured data to PostgreSQL
       ↓
 Text Chunking (1000 chars, 100 overlap)
       ↓
-Generate Embeddings (OpenAI text-embedding-ada-002)
+Generate Embeddings (text-embedding-ada-002)
       ↓
-Store in ChromaDB via LangChain
+Store in ChromaDB via LangChain Document objects
 ```
 
-**Code:** `parsing.py` → `rag_langchain.py`
+**Services:**
+
+- `text_extraction.py` - PDF/DOCX parsing
+- `resume_parser.py` - LLM structured extraction
+- `rag_langchain.py` - Embedding + vector storage
 
 ---
 
 ### **Phase 2: Query Processing**
 
-#### **Option A: RetrievalQA (Single Query)**
+#### **Modern LCEL RAG Pattern**
+
+```python
+# The modern way (LCEL)
+rag_chain = (
+    {
+        "context": retriever | format_docs,
+        "question": RunnablePassthrough()
+    }
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+```
+
+**Flow:**
 
 ```
 User Query
     ↓
-LangChain Retriever (semantic search in ChromaDB)
+Retriever.invoke(query)
+  → Semantic search in ChromaDB
+  → Top-K chunks (default: 5)
     ↓
-Top-K Relevant Chunks Retrieved
+Format documents into context string
     ↓
-Custom Prompt Template + Context
+ChatPromptTemplate
+  → System: "You are an AI recruiter..."
+  → Context: Retrieved resume chunks
+  → Question: User query
     ↓
 ChatOpenAI (gpt-4o-mini, temp=0.3)
     ↓
-Generated Answer + Source Citations
+StrOutputParser
+    ↓
+Answer + Source Citations
 ```
 
 **Code:** `rag_langchain.py` → `query_with_retrieval_qa()`
 
-**Chain Type:** `stuff` (all context in one prompt)
-
 ---
 
-#### **Option B: ConversationalRetrievalChain (Multi-turn)**
+#### **Conversational RAG (with History)**
+
+```python
+rag_chain = (
+    {
+        "context": retriever | format_docs,
+        "question": RunnablePassthrough(),
+        "chat_history": lambda x: formatted_history
+    }
+    | conversational_prompt
+    | llm
+    | StrOutputParser()
+)
+```
+
+**Code:** `rag_langchain.py` → `query_with_conversational_chain()`
+
+**Features:**
+
+- Maintains conversation context
+- References previous Q&A pairs
+- Better for follow-up questions
 
 ```
 User Query + Chat History

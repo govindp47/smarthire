@@ -39,6 +39,7 @@
 ## Table Schemas
 
 ### **1. users**
+
 Stores recruiter/company accounts.
 
 | Column | Type | Constraints | Description |
@@ -54,11 +55,13 @@ Stores recruiter/company accounts.
 | updated_at | TIMESTAMP | NOT NULL | Last modification |
 
 **Indexes:**
+
 - `idx_users_email` on `email`
 
 ---
 
 ### **2. jobs**
+
 Job postings created by recruiters.
 
 | Column | Type | Constraints | Description |
@@ -77,15 +80,18 @@ Job postings created by recruiters.
 | updated_at | TIMESTAMP | NOT NULL | Last modification |
 
 **Indexes:**
+
 - `idx_jobs_user_id` on `user_id`
 - `idx_jobs_status` on `status`
 
 **Constraints:**
+
 - `CHECK (status IN ('open', 'closed', 'draft'))`
 
 ---
 
 ### **3. resumes**
+
 Uploaded candidate resumes linked to jobs.
 
 | Column | Type | Constraints | Description |
@@ -106,11 +112,13 @@ Uploaded candidate resumes linked to jobs.
 | updated_at | TIMESTAMP | NOT NULL | Last modification |
 
 **Indexes:**
+
 - `idx_resumes_job_id` on `job_id`
 - `idx_resumes_score` on `score` DESC
 - `idx_resumes_parsing_status` on `parsing_status`
 
 **Constraints:**
+
 - `CHECK (file_type IN ('pdf', 'docx'))`
 - `CHECK (parsing_status IN ('pending', 'processing', 'completed', 'failed'))`
 - `CHECK (score >= 0 AND score <= 100)`
@@ -118,6 +126,7 @@ Uploaded candidate resumes linked to jobs.
 ---
 
 ### **4. resume_data**
+
 Structured data extracted from resumes by AI.
 
 | Column | Type | Constraints | Description |
@@ -137,18 +146,21 @@ Structured data extracted from resumes by AI.
 | updated_at | TIMESTAMP | NOT NULL | Last modification |
 
 **Indexes:**
+
 - `idx_resume_data_resume_id` on `resume_id` (unique)
 - `idx_resume_data_skills` GIN index on `skills` (for fast JSONB queries)
 - `idx_resume_data_experience_years` on `total_experience_years`
 
 **JSONB Structure Examples:**
 
-**skills:** 
+**skills:**
+
 ```json
 ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS"]
 ```
 
 **experience:**
+
 ```json
 [
   {
@@ -164,6 +176,7 @@ Structured data extracted from resumes by AI.
 ```
 
 **education:**
+
 ```json
 [
   {
@@ -179,6 +192,7 @@ Structured data extracted from resumes by AI.
 ---
 
 ### **5. resume_embeddings**
+
 Vector embeddings for RAG/semantic search.
 
 | Column | Type | Constraints | Description |
@@ -206,6 +220,7 @@ Vector embeddings for RAG/semantic search.
 | created_at | TIMESTAMP | NOT NULL | Creation time |
 
 **Indexes:**
+
 - `idx_resume_embeddings_resume_id` on `resume_id`
 - `idx_resume_embeddings_chroma_id` on `chroma_id` (unique)
 
@@ -263,6 +278,7 @@ alembic downgrade -1
 ## Sample Queries
 
 **Get all resumes for a job, ranked by score:**
+
 ```sql
 SELECT r.*, rd.skills, rd.total_experience_years
 FROM resumes r
@@ -272,6 +288,7 @@ ORDER BY r.score DESC NULLS LAST;
 ```
 
 **Search resumes by skill (JSONB query):**
+
 ```sql
 SELECT r.candidate_name, rd.skills
 FROM resumes r
@@ -280,6 +297,7 @@ WHERE rd.skills @> '["Python"]'::jsonb;
 ```
 
 **Get top candidates with 5+ years experience:**
+
 ```sql
 SELECT r.*, rd.total_experience_years
 FROM resumes r

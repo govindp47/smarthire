@@ -1,7 +1,8 @@
 # SmartHire - API Specification
 
 **Base URL:** `http://localhost:8000`  
-**API Version:** 1.0.0
+**API Version:** 1.0.0  
+**Documentation:** `http://localhost:8000/docs` (Swagger UI)
 
 ---
 
@@ -19,15 +20,61 @@ Authorization: Bearer <access_token>
 
 ---
 
-## Endpoints
+## Endpoints Overview
 
-### **Authentication**
+### Authentication (`/api/auth`)
 
-#### **POST /api/auth/signup**
+- `POST /signup` - Create account
+- `POST /login` - Get JWT token
+- `GET /me` - Get current user
+
+### Jobs (`/api/jobs`)
+
+- `POST /jobs` - Create job
+- `GET /jobs` - List jobs
+- `GET /jobs/{id}` - Get job details
+- `PUT /jobs/{id}` - Update job
+- `DELETE /jobs/{id}` - Delete job
+- `GET /jobs/{id}/stats` - Get resume statistics
+- `GET /jobs/{id}/leaderboard` - Get top candidates
+
+### Resumes (`/api/jobs/{job_id}/resumes`)
+
+- `POST /jobs/{job_id}/resumes` - Upload resume
+- `GET /jobs/{job_id}/resumes` - List resumes for job
+- `GET /resumes/{id}` - Get resume details
+- `GET /resumes/{id}/download` - Download resume file
+- `DELETE /resumes/{id}` - Delete resume
+
+### Parsing (`/api`)
+
+- `POST /resumes/{id}/parse` - Parse single resume
+- `POST /jobs/{job_id}/parse-all` - Parse all pending resumes
+- `GET /resumes/{id}/parsed-data` - Get parsed data
+
+### Scoring (`/api`)
+
+- `POST /resumes/{id}/score` - Score single resume
+- `POST /jobs/{job_id}/score-all` - Score all resumes
+
+### RAG Query (`/api`)
+
+- `POST /jobs/{job_id}/query` - Query job's resumes
+- `POST /query` - Query all resumes
+- `GET /jobs/{job_id}/vector-stats` - Vector store stats
+- `GET /vector-store/stats` - Global vector store stats
+
+---
+
+## Detailed Endpoints
+
+### Authentication
+
+#### POST /api/auth/signup
 
 Create a new user account.
 
-**Request Body:**
+**Request:**
 
 ```json
 {
@@ -47,19 +94,15 @@ Create a new user account.
   "full_name": "John Doe",
   "company_name": "Acme Corp",
   "is_active": true,
-  "is_superuser": false,
-  "created_at": "2026-02-11T10:00:00",
-  "updated_at": "2026-02-11T10:00:00"
+  "created_at": "2026-02-15T10:00:00"
 }
 ```
 
----
+#### POST /api/auth/login
 
-#### **POST /api/auth/login**
+Authenticate and get JWT token.
 
-Login with email and password.
-
-**Request Body:**
+**Request:**
 
 ```json
 {
@@ -72,16 +115,14 @@ Login with email and password.
 
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
   "token_type": "bearer"
 }
 ```
 
----
+#### GET /api/auth/me
 
-#### **GET /api/auth/me**
-
-Get current user information.
+Get current authenticated user.
 
 **Headers:** `Authorization: Bearer <token>`
 
@@ -92,34 +133,28 @@ Get current user information.
   "id": "uuid",
   "email": "user@example.com",
   "full_name": "John Doe",
-  "company_name": "Acme Corp",
-  "is_active": true,
-  "is_superuser": false,
-  "created_at": "2026-02-11T10:00:00",
-  "updated_at": "2026-02-11T10:00:00"
+  "company_name": "Acme Corp"
 }
 ```
 
 ---
 
-### **Jobs**
+### Jobs
 
-#### **POST /api/jobs**
+#### POST /api/jobs
 
 Create a new job posting.
 
-**Headers:** `Authorization: Bearer <token>`
-
-**Request Body:**
+**Request:**
 
 ```json
 {
   "title": "Senior Backend Engineer",
-  "description": "Full job description here...",
-  "requirements": "5+ years Python, FastAPI, PostgreSQL",
+  "description": "We are looking for...",
+  "requirements": "5+ years Python, FastAPI...",
   "location": "San Francisco, CA",
-  "employment_type": "Full-time",
-  "experience_level": "Senior",
+  "employment_type": "full-time",
+  "experience_level": "senior",
   "salary_range": "$150k - $200k",
   "status": "open"
 }
@@ -132,133 +167,195 @@ Create a new job posting.
   "id": "uuid",
   "user_id": "uuid",
   "title": "Senior Backend Engineer",
-  "description": "Full job description here...",
-  "requirements": "5+ years Python, FastAPI, PostgreSQL",
-  "location": "San Francisco, CA",
-  "employment_type": "Full-time",
-  "experience_level": "Senior",
-  "salary_range": "$150k - $200k",
   "status": "open",
-  "created_at": "2026-02-11T10:00:00",
-  "updated_at": "2026-02-11T10:00:00"
+  "created_at": "2026-02-15T10:00:00"
 }
 ```
 
----
+#### GET /api/jobs/{id}/stats
 
-#### **GET /api/jobs**
+Get statistics for a job's resumes.
 
-List all jobs for current user.
+**Response:** `200 OK`
 
-**Headers:** `Authorization: Bearer <token>`
+```json
+{
+  "total_resumes": 25,
+  "parsed_resumes": 23,
+  "pending_resumes": 2,
+  "average_score": 78.5
+}
+```
 
-**Query Parameters:**
+#### GET /api/jobs/{id}/leaderboard
 
-- `status_filter` (optional): Filter by status (open, closed, draft)
-- `skip` (optional): Pagination offset (default: 0)
-- `limit` (optional): Number of results (default: 100, max: 100)
+Get top-ranked candidates.
+
+**Query Params:** `limit` (default: 10)
 
 **Response:** `200 OK`
 
 ```json
 [
   {
-    "id": "uuid",
-    "title": "Senior Backend Engineer",
-    "location": "San Francisco, CA",
-    "employment_type": "Full-time",
-    "status": "open",
-    "created_at": "2026-02-11T10:00:00"
+    "resume_id": "uuid",
+    "candidate_name": "John Doe",
+    "score": 92.5,
+    "rank": 1,
+    "file_name": "john_resume.pdf"
   }
 ]
 ```
 
 ---
 
-#### **GET /api/jobs/{job_id}**
+### Resumes
 
-Get a specific job by ID.
+#### POST /api/jobs/{job_id}/resumes
 
-**Headers:** `Authorization: Bearer <token>`
+Upload a resume file.
 
-**Response:** `200 OK`
+**Content-Type:** `multipart/form-data`
 
-```json
-{
-  "id": "uuid",
-  "user_id": "uuid",
-  "title": "Senior Backend Engineer",
-  "description": "...",
-  "requirements": "...",
-  "location": "San Francisco, CA",
-  "employment_type": "Full-time",
-  "experience_level": "Senior",
-  "salary_range": "$150k - $200k",
-  "status": "open",
-  "created_at": "2026-02-11T10:00:00",
-  "updated_at": "2026-02-11T10:00:00"
-}
-```
+**Form Data:**
 
----
+- `file`: PDF or DOCX file (max 5MB)
 
-#### **PUT /api/jobs/{job_id}**
-
-Update a job posting.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Request Body:** (all fields optional)
-
-```json
-{
-  "title": "Updated Title",
-  "status": "closed"
-}
-```
-
-**Response:** `200 OK`
+**Response:** `201 Created`
 
 ```json
 {
   "id": "uuid",
-  "user_id": "uuid",
-  "title": "Updated Title",
-  "status": "closed",
-  ...
-}
-```
-
----
-
-#### **DELETE /api/jobs/{job_id}**
-
-Delete a job posting.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:** `204 No Content`
-
-**Note:** This will cascade delete all associated resumes.
-
----
-
-#### **GET /api/jobs/{job_id}/stats**
-
-Get statistics for a job.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:** `200 OK`
-
-```json
-{
   "job_id": "uuid",
-  "job_title": "Senior Backend Engineer",
-  "total_resumes": 15,
-  "parsed_resumes": 12,
-  "pending_resumes": 3,
-  "average_score": 78.5
+  "file_name": "resume.pdf",
+  "file_size": 245678,
+  "file_type": "pdf",
+  "upload_status": "completed",
+  "parsing_status": "pending",
+  "created_at": "2026-02-15T10:00:00"
+}
+```
+
+#### GET /api/resumes/{id}/parsed-data
+
+Get parsed resume data (requires parsing_status='completed').
+
+**Response:** `200 OK`
+
+```json
+{
+  "id": "uuid",
+  "candidate_name": "John Doe",
+  "candidate_email": "john@example.com",
+  "score": 85.3,
+  "resume_data": {
+    "skills": ["Python", "FastAPI", "PostgreSQL"],
+    "experience": [
+      {
+        "title": "Senior Engineer",
+        "company": "Tech Corp",
+        "start_date": "2020-01",
+        "end_date": "Present",
+        "duration_months": 48
+      }
+    ],
+    "education": [
+      {
+        "degree": "B.S. Computer Science",
+        "institution": "MIT",
+        "graduation_year": 2020
+      }
+    ],
+    "total_experience_years": 5.2,
+    "summary": "Experienced backend engineer..."
+  }
+}
+```
+
+---
+
+### Parsing
+
+#### POST /api/resumes/{id}/parse
+
+Trigger parsing for a single resume (async).
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Resume parsing started",
+  "resume_id": "uuid",
+  "status": "processing"
+}
+```
+
+#### POST /api/jobs/{job_id}/parse-all
+
+Parse all pending resumes for a job (async).
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Parsing started for 15 resumes",
+  "job_id": "uuid",
+  "count": 15
+}
+```
+
+---
+
+### Scoring
+
+#### POST /api/jobs/{job_id}/score-all
+
+Score all parsed resumes and update rankings.
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Scoring started for 15 resumes",
+  "job_id": "uuid",
+  "count": 15
+}
+```
+
+---
+
+### RAG Query
+
+#### POST /api/jobs/{job_id}/query
+
+Query resumes using natural language.
+
+**Request:**
+
+```json
+{
+  "query": "Who has 5+ years of Python experience?",
+  "top_k": 5,
+  "use_conversation": false,
+  "chat_history": []
+}
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "answer": "Based on the resumes, John Doe has 7 years of Python...",
+  "sources": [
+    {
+      "resume_id": "uuid",
+      "candidate_name": "John Doe",
+      "relevance_score": 0.92,
+      "excerpt": "Senior Backend Engineer with 7 years..."
+    }
+  ],
+  "query": "Who has 5+ years of Python experience?",
+  "num_sources": 3
 }
 ```
 
@@ -266,7 +363,9 @@ Get statistics for a job.
 
 ## Error Responses
 
-### **400 Bad Request**
+All endpoints return consistent error format:
+
+**400 Bad Request**
 
 ```json
 {
@@ -274,15 +373,15 @@ Get statistics for a job.
 }
 ```
 
-### **401 Unauthorized**
+**401 Unauthorized**
 
 ```json
 {
-  "detail": "Invalid authentication credentials"
+  "detail": "Could not validate credentials"
 }
 ```
 
-### **403 Forbidden**
+**403 Forbidden**
 
 ```json
 {
@@ -290,7 +389,7 @@ Get statistics for a job.
 }
 ```
 
-### **404 Not Found**
+**404 Not Found**
 
 ```json
 {
@@ -298,54 +397,28 @@ Get statistics for a job.
 }
 ```
 
-### **422 Validation Error**
+**500 Internal Server Error**
 
 ```json
 {
-  "detail": [
-    {
-      "loc": ["body", "email"],
-      "msg": "invalid email format",
-      "type": "value_error"
-    }
-  ]
+  "detail": "Internal server error"
 }
 ```
 
 ---
 
-## Status Codes
-
-- `200` - OK
-- `201` - Created
-- `204` - No Content
-- `400` - Bad Request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not Found
-- `422` - Validation Error
-- `500` - Internal Server Error
-
----
-
 ## Rate Limiting
 
-Not implemented yet. Will be added in production.
+Currently not implemented. To be added in production.
 
 ---
 
-## Coming Soon
+## Versioning
 
-- **Resume Management:**
-  - `POST /api/jobs/{job_id}/resumes` - Upload resume
-  - `GET /api/jobs/{job_id}/resumes` - List resumes
-  - `GET /api/resumes/{resume_id}` - Get resume details
-  
-- **AI Features:**
-  - `POST /api/resumes/{resume_id}/parse` - Parse resume
-  - `POST /api/jobs/{job_id}/score` - Score all resumes
-  - `POST /api/jobs/{job_id}/query` - RAG query
+API version is included in base URL. Current version: v1
+
+Future versions will be available at: `/api/v2/...`
 
 ---
 
-**Last Updated:** 2026-02-11
+For interactive API documentation, visit: `http://localhost:8000/docs`

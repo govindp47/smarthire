@@ -4,6 +4,9 @@ import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/Login';
 import { SignupPage } from './pages/Signup';
+import { DashboardPage } from './pages/Dashboard';
+import { CreateJobPage } from './pages/CreateJob';
+import { JobDetailPage } from './pages/JobDetail';
 
 // Create a client for React Query
 const queryClient = new QueryClient({
@@ -30,15 +33,29 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <div className="p-8">
-                    <h1 className="text-2xl font-bold">Dashboard (Coming Soon)</h1>
-                  </div>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/create"
+              element={
+                <ProtectedRoute>
+                  <CreateJobPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/:id"
+              element={
+                <ProtectedRoute>
+                  <JobDetailPage />
                 </ProtectedRoute>
               }
             />
             
             {/* Default redirect */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </Router>
       </AuthProvider>

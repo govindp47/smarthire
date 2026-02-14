@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.database import close_db
-from app.api.routes import auth, jobs, parsing, resumes, scoring
+from app.api.routes import auth, jobs, parsing, rag, resumes, scoring
 
 
 @asynccontextmanager
@@ -48,6 +48,7 @@ app.include_router(jobs.router, prefix="/api/jobs", tags=["Jobs"])
 app.include_router(resumes.router, prefix="/api/jobs", tags=["Resumes"])
 app.include_router(parsing.router, prefix="/api", tags=["Parsing"])
 app.include_router(scoring.router, prefix="/api", tags=["Scoring"])
+app.include_router(rag.router, prefix="/api", tags=["RAG Queries"])
 
 
 @app.get("/")

@@ -15,6 +15,7 @@ from app.models import Resume, Job, User, ResumeData
 from app.schemas import Resume as ResumeSchema, ResumeWithData
 from app.api.deps import get_current_user
 from app.services.text_extraction import text_extractor
+from app.services.rag_langchain import langchain_rag_service
 from app.services.resume_parser import resume_parser
 
 logger = logging.getLogger(__name__)
@@ -103,6 +104,35 @@ async def parse_resume_background(resume_id: UUID, db: AsyncSession):
         
         await db.commit()
         logger.info(f"Successfully parsed resume {resume_id}")
+
+        # Create embeddings for RAG using LangChain (don't fail if this errors)
+        try:
+            # Chunk the text
+            chunks = text_extractor.chunk_text(raw_text, chunk_size=1000, overlap=100)
+            
+            # Add metadata to chunks
+            metadata_list = []
+            for i, chunk in enumerate(chunks):
+                metadata_list.append({
+                    "candidate_name": resume.candidate_name or "Unknown",
+                    "job_id": str(resume.job_id),
+                    "chunk_index": i,
+                    "total_chunks": len(chunks)
+                })
+            
+            # Store in vector database using LangChain
+            success = await langchain_rag_service.add_documents_to_vectorstore(
+                resume_id=resume_id,
+                text_chunks=chunks,
+                metadata_list=metadata_list
+            )
+            
+            if success:
+                logger.info(f"Created {len(chunks)} embeddings for resume {resume_id} using LangChain")
+            
+        except Exception as e:
+            logger.warning(f"Failed to create embeddings for resume {resume_id}: {str(e)}")
+            # Don't fail the whole parsing if embeddings fail
         
     except Exception as e:
         logger.error(f"Failed to parse resume {resume_id}: {str(e)}")

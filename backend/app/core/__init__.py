@@ -8,6 +8,12 @@ from app.core.security import (
     create_access_token,
     decode_access_token,
 )
+from app.core.llm_instances import (
+    get_llm,
+    get_embeddings,
+    get_parsing_llm,
+    get_openai_client,
+)
 
 __all__ = [
     "settings",
@@ -15,4 +21,8 @@ __all__ = [
     "get_password_hash",
     "create_access_token",
     "decode_access_token",
+    "get_llm",
+    "get_embeddings",
+    "get_parsing_llm",
+    "get_openai_client",
 ]

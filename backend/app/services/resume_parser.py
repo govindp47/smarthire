@@ -3,12 +3,11 @@ Resume parser service: Extract structured data from resume text using LLM.
 """
 import json
 import logging
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any
 from datetime import datetime, timezone
 
-from openai import AsyncOpenAI
-
 from app.core.config import settings
+from app.core import get_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +17,7 @@ class ResumeParserService:
     
     def __init__(self):
         """Initialize OpenAI client."""
-        self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+        self.client = get_openai_client()  # Use singleton instance
         self.model = settings.OPENAI_MODEL
     
     async def parse_resume(self, resume_text: str) -> Dict[str, Any]:

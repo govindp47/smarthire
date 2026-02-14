@@ -60,6 +60,8 @@ htmlcov/
 faiss_index/
 chroma_db/
 embeddings/
+vector_store/
+backend/vector_store/
 
 # Uploads (local development)
 uploads/

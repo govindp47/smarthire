@@ -2,12 +2,10 @@
 Resume scoring service: Calculate match scores between resumes and jobs.
 """
 import logging
-from typing import Dict, List, Any, Optional
-import re
-
-from openai import AsyncOpenAI
+from typing import Dict, List, Any
 
 from app.core.config import settings
+from app.core import get_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +15,7 @@ class ScoringService:
     
     def __init__(self):
         """Initialize OpenAI client for embeddings."""
-        self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+        self.client = get_openai_client()  # Use singleton instance
         self.embedding_model = settings.EMBEDDING_MODEL
     
     async def score_resume(

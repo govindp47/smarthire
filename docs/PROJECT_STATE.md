@@ -12,7 +12,7 @@
 |-------|--------|----------|------------|
 | Phase 0: Foundation | ✅ Complete | 2/2 | 100% |
 | Phase 1: Core Backend | ✅ Complete | 3/4 | 100% |
-| Phase 2: AI Core | 🔄 In Progress | 2/4 | 50% |
+| Phase 2: AI Core | ✅ Complete | 4/4 | 100% |
 | Phase 3: Frontend | ⏳ Not Started | 0/4 | 0% |
 | Phase 4: Deployment | ⏳ Not Started | 0/3 | 0% |
 
@@ -60,34 +60,40 @@
 - [x] File download endpoint
 - [x] Resume deletion with file cleanup
 
-### Phase 2: AI Core
+### Phase 2: AI Core ✅ COMPLETE
 
-- [x] Text extraction service (PDF/DOCX) - storage agnostic
-- [x] LLM-based resume parser
-- [x] Structured data extraction (skills, experience, education)
-- [x] Background task processing
-- [x] Resume parsing endpoints
-- [x] Auto-population of candidate info
-- [x] Scoring service with keyword matching
-- [x] Experience level scoring
-- [x] Semantic similarity with embeddings
-- [x] Weighted scoring algorithm
-- [x] Automatic ranking system
-- [x] Batch scoring endpoints
-- [x] Leaderboard endpoint
+- [x] **2.1 Resume Parsing**
+  - [x] PDF text extraction (storage-agnostic)
+  - [x] LLM-based structured extraction
+  - [x] Skill/experience entity recognition
+  - [x] Save parsed data to DB
+- [x] **2.2 Embedding & Vector Store**
+  - [x] Generate embeddings for resumes (OpenAI)
+  - [x] Setup ChromaDB with LangChain integration
+  - [x] Indexing pipeline
+- [x] **2.3 RAG Implementation**
+  - [x] Query pipeline
+  - [x] Retrieval logic
+  - [x] **LangChain integration** (RetrievalQA + ConversationalRetrievalChain)
+  - [x] Response generation with custom prompts
+  - [x] Conversation memory support
+- [x] **2.4 Scoring Algorithm**
+  - [x] Keyword matching (50%)
+  - [x] Semantic similarity (25%)
+  - [x] Experience level scoring (25%)
+  - [x] Weighted ranking logic
 
 ---
 
 ## 🔄 Current Task
 
-**Working On:** Phase 2.3 - RAG (Retrieval Augmented Generation)
+**Phase 2 Complete!** 🎉
 
-**Next Steps:**
+**Next Options:**
 
-1. Setup ChromaDB vector store
-2. Create embeddings service
-3. Build RAG query endpoint
-4. Enable natural language queries over resumes
+1. Phase 3: React Frontend
+2. Phase 4: Docker + AWS Deployment
+3. Add tests and polish
 
 ---
 

@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+
+# Vite / build caches
+.vite/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Testing
+coverage/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+
+# OS
+.DS_Store
+
+# Misc
+.cache/
+.eslintcache
+.parcel-cache

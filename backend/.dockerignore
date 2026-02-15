@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Local data (will be in volumes)
+uploads/
+vector_store/
+*.db
+*.sqlite
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ML model caches
+.cache/
+.huggingface/
+.hf/
+torch_cache/
+
+# Python tooling
+pip-wheel-metadata/
+*.whl
+pip-log.txt
+
+# Node tooling
+.npmrc
+.yarnrc
+.pnpm-store/
+
+# Profiling / coverage
+.prof
+*.prof
+coverage.xml
+
+# CI / GitHub
+.github/
+.gitlab/

@@ -57,3 +57,23 @@ mypy==1.8.0
 
 # Monitoring & Logging
 python-json-logger==2.0.7
+
+# FastAPI internals
+anyio==4.12.1
+starlette==0.50.0
+
+# Async HTTP
+aiohttp==3.13.3
+
+# Security
+cryptography==46.0.5
+
+# ML / Embeddings
+numpy==2.4.2
+scikit-learn==1.8.0
+torch==2.10.0
+transformers==4.57.6
+tokenizers==0.22.2
+
+# Performance
+orjson==3.11.7

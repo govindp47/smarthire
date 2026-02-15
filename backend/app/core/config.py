@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     
     # OpenAI
     OPENAI_API_KEY: str
-    OPENAI_MODEL: str
+    OPENAI_MODEL: str = "gpt-4o-mini"  # Fast and cost-effective
 
     # AWS S3
     AWS_ACCESS_KEY_ID: str = ""

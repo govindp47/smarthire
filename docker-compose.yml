@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: smarthire-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-smarthire}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-smarthire_password}
+      POSTGRES_DB: ${POSTGRES_DB:-smarthire_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smarthire-network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: smarthire-backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-smarthire}:${POSTGRES_PASSWORD:-smarthire_password}@postgres:5432/${POSTGRES_DB:-smarthire_db}
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-in-production}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-ada-002}
+      VECTOR_STORE_PATH: /app/vector_store
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:80}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_vector_store:/app/vector_store
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - smarthire-network
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    container_name: smarthire-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - smarthire-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local
+  backend_vector_store:
+    driver: local
+
+networks:
+  smarthire-network:
+    driver: bridge

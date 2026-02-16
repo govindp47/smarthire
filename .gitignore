@@ -18,6 +18,7 @@ build/
 .env.*.local
 backend/.env
 frontend/.env
+env_backup/
 
 # IDEs
 .vscode/

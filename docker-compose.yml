@@ -34,7 +34,7 @@ services:
       EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-ada-002}
       VECTOR_STORE_PATH: /app/vector_store
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:80}
-      ENVIRONMENT: ${ENVIRONMENT:-development}
+      ENVIRONMENT: development
     ports:
       - "8000:8000"
     volumes:

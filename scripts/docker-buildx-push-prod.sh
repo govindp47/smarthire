@@ -96,15 +96,20 @@ echo -e "${GREEN}✅ Frontend done!${NC}"
 
 # Update docker-compose.ec2.yml automatically
 echo ""
-echo -e "${GREEN}🔧 Updating docker-compose.ec2.yml with your username...${NC}"
+echo -e "${GREEN}🔧 Generating docker-compose.ec2.yml from template...${NC}"
 
-if [ -f "docker-compose.ec2.yml" ]; then
-    cp docker-compose.ec2.yml docker-compose.ec2.yml.backup
+if [ -f "docker-compose.ec2.template.yml" ]; then
+    # Copy template → actual file
+    cp docker-compose.ec2.template.yml docker-compose.ec2.yml
+
+    # Replace Docker Hub username
     sed -i.tmp "s|YOUR_DOCKERHUB_USERNAME|$DOCKER_USERNAME|g" docker-compose.ec2.yml
     rm -f docker-compose.ec2.yml.tmp
-    echo -e "${GREEN}✅ Updated docker-compose.ec2.yml${NC}"
+
+    echo -e "${GREEN}✅ docker-compose.ec2.yml generated and updated${NC}"
 else
-    echo -e "${YELLOW}⚠️  docker-compose.ec2.yml not found, skipping.${NC}"
+    echo -e "${RED}❌ docker-compose.ec2.template.yml not found!${NC}"
+    exit 1
 fi
 
 # Success!

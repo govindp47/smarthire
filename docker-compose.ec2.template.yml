@@ -23,14 +23,9 @@ services:
       - backend_vector_store:/app/vector_store
     networks:
       - smarthire-network
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
-        reservations:
-          cpus: '1'
-          memory: 1G
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "1.0"
 
   # React Frontend (Pre-built from Docker Hub)
   frontend:
@@ -44,11 +39,8 @@ services:
     networks:
       - smarthire-network
     restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 512M
+    mem_limit: 128m
+    cpus: "0.5"
 
 volumes:
   backend_vector_store:

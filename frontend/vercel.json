@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://smarthire-ai.duckdns.org:8000/api/:path*"
+      "destination": "https://smarthire-ai.duckdns.org/api/:path*"
     },
     {
       "source": "/(.*)",

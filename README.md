@@ -77,11 +77,17 @@ SmartHire is a modern SaaS platform that revolutionizes the recruitment process 
 - **HTTP Client**: Axios
 - **Icons**: Lucide React
 
-### DevOps (Ready)
+### DevOps & Deployment
 
-- **Containerization**: Docker + Docker Compose
-- **Deployment**: AWS (EC2, RDS, S3)
-- **Environment**: Python venv, npm
+- **Containerization**: Docker + Docker Compose (multi-stage builds)
+- **Cloud Deployment**:
+  - AWS EC2 (t2.micro free tier)
+  - AWS RDS PostgreSQL (optional)
+  - AWS S3 (optional, local storage supported)
+- **Frontend Hosting**: Vercel (free tier with auto-deploy)
+- **DNS**: DuckDNS (free subdomain)
+- **SSL/TLS**: Let's Encrypt (auto-renewal)
+- **CI/CD**: GitHub → Vercel auto-deployment
 
 ---
 
@@ -156,12 +162,63 @@ Frontend will be available at `http://localhost:3000`
 
 ---
 
+## 🌐 Deployment
+
+### Quick Deploy to Production (Free)
+
+**Option 1: Vercel + DuckDNS (Recommended - $0/month)**
+
+- Frontend on Vercel CDN (auto-deploy from GitHub)
+- Backend on AWS EC2 free tier
+- Free HTTPS with Let's Encrypt
+- Free domain with DuckDNS
+
+📖 **Follow**: [docs/DEPLOY_VERCEL_DUCKDNS.md](docs/DEPLOY_VERCEL_DUCKDNS.md)
+
+**Option 2: All on EC2 (Simple)**
+
+- Everything containerized on one EC2 instance
+- Local Docker build or Docker Hub images
+
+📖 **Follow**: [docs/DEPLOYMENT_OPTIONS.md](docs/DEPLOYMENT_OPTIONS.md)
+
+### Infrastructure Options
+
+| Component | Free Option | Paid Option |
+|-----------|-------------|-------------|
+| **Frontend** | Vercel (free tier) | Vercel Pro |
+| **Backend** | EC2 t2.micro (12mo free) | EC2 t3.small+ |
+| **Database** | Docker PostgreSQL on EC2 | AWS RDS |
+| **Storage** | Local filesystem | AWS S3 |
+| **Domain** | DuckDNS (free) | Custom domain ($1-12/yr) |
+| **SSL** | Let's Encrypt (free) | Let's Encrypt (free) |
+
+**Total Cost**: $0 for first year with free tier
+
+---
+
 ## 📚 Documentation
 
+### Core Documentation
+
 - **API Documentation**: `http://localhost:8000/docs` (Swagger UI)
-- **Database Schema**: See [docs/DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md)
-- **Architecture**: See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- **Project State**: See [docs/PROJECT_STATE.md](docs/PROJECT_STATE.md)
+- **[API Specification](docs/API_SPEC.md)** - Complete API reference
+- **[Database Schema](docs/DATABASE_SCHEMA.md)** - PostgreSQL schema and relationships
+- **[Architecture](docs/ARCHITECTURE.md)** - System architecture and LangChain 1.0+ patterns
+- **[Technical Decisions](docs/DECISIONS.md)** - Technology choices and rationale
+- **[Project State](docs/PROJECT_STATE.md)** - Development progress tracker
+
+### Deployment Documentation
+
+- **[AWS Infrastructure Setup](docs/DEPLOY_AWS_SETUP.md)** - EC2, RDS, S3 setup (Console + CLI)
+- **[Build on EC2](docs/DEPLOY_BUILD_ON_EC2.md)** - Direct Docker build on EC2
+- **[Docker Hub Deployment](docs/DEPLOY_DOCKERHUB_BUILDX.md)** - Cross-platform builds (Mac → Linux)
+- **[Vercel + DuckDNS Setup](docs/DEPLOY_VERCEL_DUCKDNS.md)** - Free production deployment
+- **[Deployment Options](docs/DEPLOYMENT_OPTIONS.md)** - Comparison of all deployment methods
+
+### Operations
+
+- **[Troubleshooting Guide](docs/TROUBLESHOOTING_EC2_DOCKER.md)** - Debug EC2/Docker issues
 
 ---
 
@@ -181,6 +238,7 @@ smarthire/
 │   ├── alembic/             # Database migrations
 │   ├── uploads/             # Local file storage (gitignored)
 │   ├── vector_store/        # ChromaDB data (gitignored)
+│   ├── Dockerfile           # Backend container
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -189,8 +247,23 @@ smarthire/
 │   │   ├── lib/             # API client, utilities
 │   │   ├── pages/           # Page components
 │   │   └── App.jsx
+│   ├── Dockerfile           # Frontend container
+│   ├── nginx.conf           # Nginx configuration
+│   ├── vercel.json          # Vercel deployment config
 │   └── package.json
-└── docs/                    # Documentation
+├── docs/                    # Documentation
+│   ├── API_SPEC.md          # API reference
+│   ├── ARCHITECTURE.md      # System design
+│   ├── DATABASE_SCHEMA.md   # Database structure
+│   ├── DECISIONS.md         # Tech decisions
+│   ├── DEPLOY_*.md          # Deployment guides
+│   └── TROUBLESHOOTING_*.md # Debug guides
+├── scripts/
+│   ├── build-and-push.sh    # Docker Hub deployment
+│   └── docker-dev.sh        # Local development
+├── docker-compose.yml       # Local development
+├── docker-compose.ec2.yml   # EC2 deployment
+└── docker-compose.prod.yml  # Production deployment
 ```
 
 ---
@@ -253,9 +326,7 @@ This project was built with the assistance of **Claude AI (Anthropic)** as a lea
 
 **Transparency Statement**: AI assistance was used to accelerate development and learn new technologies. All code has been reviewed, understood, and can be explained by the developer. Claude served as a pair programming assistant to help implement industry-standard patterns and best practices.
 
-
 ---
-
 
 <div align="center">
 
